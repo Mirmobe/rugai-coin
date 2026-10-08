@@ -1,0 +1,7 @@
+keys/
+*.keypair.json
+id.json
+.DS_Store
+node_modules/
+mint-address.txt
+launch-receipt.txt

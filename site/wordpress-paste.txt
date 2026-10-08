@@ -1,0 +1,18 @@
+RUGAI · The Black Terminal
+
+Community token for the Solana mint scanner.
+Scanner: https://rugai.grok.me
+Code: https://github.com/Mirmobe/rugai-coin
+
+Paste a mint on the scanner. The score is a heuristic risk read, not a promise and not financial advice.
+
+Token
+- Chain: Solana
+- Supply: 1,000,000,000
+- Mint authority: revoked after launch
+- Freeze authority: revoked after launch
+- Mint address: publish only the address printed by scripts/create-token.sh
+
+Not affiliated with xAI. An unrelated RUG AI token already trades on Solana. Do not reuse that address.
+
+Tip jar (the scan stays free): https://paypal.me/mirmobe

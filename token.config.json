@@ -1,0 +1,10 @@
+{
+  "name": "RUGAI",
+  "symbol": "RUGAI",
+  "decimals": 6,
+  "supply": "1000000000",
+  "description": "Community token for the RUGAI Solana mint scanner at rugai.grok.me. A heuristic risk read, not a promise and not financial advice. Not affiliated with xAI.",
+  "external_url": "https://rugai.grok.me",
+  "scanner": "https://rugai.grok.me",
+  "website": "https://mirmobe3.wordpress.com"
+}
