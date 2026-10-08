@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Create a fixed-supply SPL token and revoke mint + freeze authority.
-# Defaults to devnet. Pass --mainnet only when you mean it.
+# Defaults to devnet and expects the dev wallet. Pass --mainnet only when you mean it.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -35,17 +35,42 @@ PY
 DECIMALS="$(read_cfg decimals)"
 SUPPLY="$(read_cfg supply)"
 SYMBOL="$(read_cfg symbol)"
+LAUNCH="$(python3 - "$CONFIG" <<'PY'
+import json, sys
+print(json.load(open(sys.argv[1]))["wallets"]["launch"])
+PY
+)"
+DEV="$(python3 - "$CONFIG" <<'PY'
+import json, sys
+print(json.load(open(sys.argv[1]))["wallets"]["dev"])
+PY
+)"
 
 if [[ "$NETWORK" == "mainnet-beta" ]]; then
-  echo "About to mint ${SUPPLY} ${SYMBOL} on MAINNET and then revoke authorities."
+  EXPECTED="$LAUNCH"
+else
+  EXPECTED="$DEV"
+fi
+
+if [[ "$NETWORK" == "mainnet-beta" ]]; then
+  echo "About to mint ${SUPPLY} ${SYMBOL} on MAINNET from ${EXPECTED} and then revoke authorities."
   echo "Type MAINNET to continue:"
   read -r confirm
   [[ "$confirm" == "MAINNET" ]] || { echo "Aborted."; exit 1; }
 fi
 
 solana config set --url "$NETWORK" >/dev/null
+ACTIVE="$(solana address)"
 echo "RPC: $(solana config get | awk '/RPC URL/{print $3}')"
-echo "Wallet: $(solana address)"
+echo "Wallet: $ACTIVE"
+echo "Expected signer: $EXPECTED"
+
+if [[ "$ACTIVE" != "$EXPECTED" ]]; then
+  echo "Active keypair does not match the expected wallet." >&2
+  echo "Devnet expects the dev wallet. Mainnet expects the launch wallet." >&2
+  echo "Switch with: solana config set --keypair /path/to/that-wallet.json" >&2
+  exit 1
+fi
 
 MINT="$(spl-token create-token --decimals "$DECIMALS" | awk '/Address:/{print $2}')"
 echo "Mint: $MINT"
@@ -63,6 +88,7 @@ spl-token authorize "$MINT" freeze --disable >/dev/null
 printf '%s\n' "$MINT" > "$ROOT/mint-address.txt"
 {
   echo "network=$NETWORK"
+  echo "signer=$ACTIVE"
   echo "mint=$MINT"
   echo "token_account=$ACCOUNT"
   echo "supply=$SUPPLY"
