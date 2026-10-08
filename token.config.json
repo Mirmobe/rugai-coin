@@ -6,5 +6,10 @@
   "description": "Community token for the RUGAI Solana mint scanner at rugai.grok.me. A heuristic risk read, not a promise and not financial advice. Not affiliated with xAI.",
   "external_url": "https://rugai.grok.me",
   "scanner": "https://rugai.grok.me",
-  "website": "https://mirmobe3.wordpress.com"
+  "website": "https://mirmobe3.wordpress.com",
+  "wallets": {
+    "launch": "5P1ArCLapXPjSEaNauVYAmtLKxEwoELcttQvPqmF1VYP",
+    "dev": "A1HEFEZjYQd8nDg62ihtnVipYokhdjdBuE6WHpD6B5WC",
+    "note": "Public addresses only. Devnet tests should be signed by the dev wallet. Mainnet launch should be signed by the launch wallet. Never commit a private key."
+  }
 }
